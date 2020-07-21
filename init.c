@@ -116,3 +116,16 @@ int init(int width, int height, int argc, char *args[]) {
 
 	return 0;
 }
+
+void cleanUp(SDL_Renderer *renderer, SDL_Window *window, SDL_Surface *array[]) {
+
+    for(int i = 0 ; array[i] != NULL ; i++) {
+        SDL_FreeSurface(array[i]);
+    }
+
+	SDL_DestroyRenderer(renderer);
+
+	SDL_DestroyWindow(window);
+
+	SDL_Quit();
+}

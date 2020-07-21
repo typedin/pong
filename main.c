@@ -208,25 +208,6 @@ static void draw_menu() {
 	SDL_BlitSurface(title, &src, screen, &dest);
 }
 
-static void draw_background() {
-
-	SDL_Rect src;
-
-	//draw bg with net
-	src.x = 0;
-	src.y = 0;
-	src.w = screen->w;
-	src.h = screen->h;
-
-	//draw the backgorund
-	//int r = SDL_FillRect(screen,&src,0);
-
-	//if (r !=0){
-
-	//	printf("fill rectangle faliled in func draw_background()");
-	//}
-}
-
 static void draw_net() {
 
 	SDL_Rect net;
@@ -245,7 +226,7 @@ static void draw_net() {
 
 		if (r != 0) {
 
-			printf("fill rectangle faliled in func draw_net()");
+			printf("fill rectangle failled in func draw_net()");
 		}
 
 		net.y = net.y + 30;
@@ -261,11 +242,8 @@ static void draw_ball() {
 	src.w = ball.w;
 	src.h = ball.h;
 
-	int r = SDL_FillRect(screen , &src, 0xffffffff);
-
-	if (r !=0){
-
-		printf("fill rectangle faliled in func drawball()");
+	if (SDL_FillRect(screen , &src, 0xffffffff) !=0){
+		printf("fill rectangle failled in func drawball()");
 	}
 }
 
@@ -281,11 +259,8 @@ static void draw_paddle() {
 		src.w = paddle[i].w;
 		src.h = paddle[i].h;
 
-		int r = SDL_FillRect(screen, &src, 0xffffffff);
-
-		if (r !=0){
-
-			printf("fill rectangle faliled in func draw_paddle()");
+		if (SDL_FillRect(screen, &src, 0xffffffff) !=0){
+			printf("fill rectangle failled in func draw_paddle()");
 		}
 	}
 }
@@ -362,17 +337,14 @@ int main (int argc, char *args[]) {
 		const Uint8 *keystate = SDL_GetKeyboardState(NULL);
 
 		if (keystate[SDL_SCANCODE_ESCAPE]) {
-
 			quit = 1;
 		}
 
 		if (keystate[SDL_SCANCODE_DOWN]) {
-
 			move_paddle(0);
 		}
 
 		if (keystate[SDL_SCANCODE_UP]) {
-
 			move_paddle(1);
 		}
 
@@ -384,7 +356,6 @@ int main (int argc, char *args[]) {
 		if (state == 0 ) {
 
 			if (keystate[SDL_SCANCODE_SPACE]) {
-
 				state = 1;
 			}
 
@@ -420,11 +391,9 @@ int main (int argc, char *args[]) {
 
 			//if either player wins, change to game over state
 			if (r == 1) {
-
 				state = 2;
 
 			} else if (r == 2) {
-
 				state = 2;
 			}
 
@@ -466,21 +435,8 @@ int main (int argc, char *args[]) {
 		}
 	}
 
-	//free loaded images
-	SDL_FreeSurface(screen);
-	SDL_FreeSurface(title);
-	SDL_FreeSurface(numbermap);
-	SDL_FreeSurface(end);
+    SDL_Surface* ptr[] = { screen, title, numbermap, end, NULL };
 
-	//free renderer and all textures used with it
-	SDL_DestroyRenderer(renderer);
-
-	//Destroy window
-	SDL_DestroyWindow(window);
-
-	//Quit SDL subsystems
-	SDL_Quit();
-
+    cleanUp(renderer, window, ptr);
 	return 0;
-
 }

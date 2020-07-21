@@ -1,3 +1,4 @@
+#include <stdio.h>
 #ifndef MAX_SCORE
 #define MAX_SCORE 10
 #endif
@@ -18,7 +19,7 @@ void resetScores() {
 }
 
 int hasWinner(int scoreForAPlayer) {
-    return scoreForAPlayer != MAX_SCORE ? 0 : 1;
+    return scoreForAPlayer == MAX_SCORE;
 }
 
 int whoWin(int i) {
