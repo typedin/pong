@@ -3,13 +3,11 @@
 #include <stdio.h>
 
 #include "main.h"
+#include "init.h"
 #include "check_score.h"
 #include "collision.h"
 #include "move_paddle.h"
 
-//function prototypes
-//initilise SDL
-int init(int w, int h, int argc, char *args[]);
 
 // Program globals
 ball_t ball;
@@ -21,9 +19,9 @@ SDL_Renderer *renderer;		//The renderer SDL will use to draw to the screen
 
 //surfaces
 SDL_Surface *screen;
-static SDL_Surface *title;
-static SDL_Surface *numbermap;
-static SDL_Surface *end;
+SDL_Surface *title;
+SDL_Surface *numbermap;
+SDL_Surface *end;
 
 //textures
 SDL_Texture *screen_texture;
@@ -181,7 +179,6 @@ static void draw_game_over(int p) {
 
 
 	switch (p) {
-
 		case 1:
 			SDL_BlitSurface(end, &p1, screen, &dest);
 			break;
@@ -191,7 +188,6 @@ static void draw_game_over(int p) {
 		default:
 			SDL_BlitSurface(end, &cpu, screen, &dest);
 	}
-
 }
 
 static void draw_menu() {
@@ -343,7 +339,6 @@ int main (int argc, char *args[]) {
 
 	//SDL Window setup
 	if (init(SCREEN_WIDTH, SCREEN_HEIGHT, argc, args) == 1) {
-
 		return 0;
 	}
 
@@ -488,92 +483,4 @@ int main (int argc, char *args[]) {
 
 	return 0;
 
-}
-
-int init(int width, int height, int argc, char *args[]) {
-
-	//Initialize SDL
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-
-		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
-
-		return 1;
-	}
-
-	for (int i = 0; i < argc; i++) {
-
-		//Create window
-		if(strcmp(args[i], "-f")) {
-
-			SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN, &window, &renderer);
-
-		} else {
-
-			SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP, &window, &renderer);
-		}
-	}
-
-	if (window == NULL) {
-
-		printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
-
-		return 1;
-	}
-
-	//create the screen sruface where all the elemnts will be drawn onto (ball, paddles, net etc)
-	screen = SDL_CreateRGBSurfaceWithFormat(0, width, height, 32, SDL_PIXELFORMAT_RGBA32);
-
-	if (screen == NULL) {
-
-		printf("Could not create the screen surfce! SDL_Error: %s\n", SDL_GetError());
-
-		return 1;
-	}
-
-	//create the screen texture to render the screen surface to the actual display
-	screen_texture = SDL_CreateTextureFromSurface(renderer, screen);
-
-	if (screen_texture == NULL) {
-
-		printf("Could not create the screen_texture! SDL_Error: %s\n", SDL_GetError());
-
-		return 1;
-	}
-
-	//Load the title image
-	title = SDL_LoadBMP("title.bmp");
-
-	if (title == NULL) {
-
-		printf("Could not Load title image! SDL_Error: %s\n", SDL_GetError());
-
-		return 1;
-	}
-
-	//Load the numbermap image
-	numbermap = SDL_LoadBMP("numbermap.bmp");
-
-	if (numbermap == NULL) {
-
-		printf("Could not Load numbermap image! SDL_Error: %s\n", SDL_GetError());
-
-		return 1;
-	}
-
-	//Load the gameover image
-	end = SDL_LoadBMP("gameover.bmp");
-
-	if (end == NULL) {
-
-		printf("Could not Load title image! SDL_Error: %s\n", SDL_GetError());
-
-		return 1;
-	}
-
-	// Set the title colourkey.
-	Uint32 colorkey = SDL_MapRGB(title->format, 255, 0, 255);
-	SDL_SetColorKey(title, SDL_TRUE, colorkey);
-	SDL_SetColorKey(numbermap, SDL_TRUE, colorkey);
-
-	return 0;
 }
